@@ -2,11 +2,11 @@
   "name": "projeto14-mywallet-back",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "App.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "start": "node ./src/app.js"
+    "dev": "nodemon src/App.js",
+    "start": "node ./src/App.js"
   },
   "keywords": [],
   "author": "",

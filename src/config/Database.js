@@ -1,10 +1,6 @@
-import express from "express";
-import cors from "cors"
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient} from "mongodb";
 import dotenv from 'dotenv'
-import joi from 'joi'
-import dayjs from "dayjs"
-//import { stripHtml } from "string-strip-html";
+
 dotenv.config();
 
 
@@ -20,12 +16,4 @@ try{
   console.log("Database connection error!")
 }
 
-const server = express()
-
-server.use(cors())
-server.use(express.json());
-
-
-const PORT = 5001
-
-server.listen(PORT, () => console.log(`Server is up on port ${PORT}!!!`))
+export default db
