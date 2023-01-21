@@ -8,6 +8,18 @@ export async function signUp(req, res) {
   const passwordHashed = bcrypt.hashSync(password, 10)
 
   try {
+
+    //check if username or email is already in use
+    const alreadyExists = await db.collection('users').findOne({
+      $or: [
+        {name},
+        {email}
+      ]
+    })
+    //If name or email is already in use return 409
+    if(alreadyExists)
+      return res.status(409).send("Name or email already exists!")
+
     await db.collection("users").insertOne({ name, email, password: passwordHashed })
     res.status(201).send("User created successfully!")
 
