@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-//import { v4 as uuidV4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import db from '../config/Database.js'
 
 export async function signUp(req, res) {
@@ -20,7 +20,11 @@ export async function signUp(req, res) {
     if(alreadyExists)
       return res.status(409).send("Name or email already exists!")
 
-    await db.collection("users").insertOne({ name, email, password: passwordHashed })
+    await db.collection("users").insertOne({ 
+      name, 
+      email, 
+      password: passwordHashed 
+    })
     res.status(201).send("User created successfully!")
 
   } catch (error) {
@@ -28,3 +32,28 @@ export async function signUp(req, res) {
   }
 }
 
+export async function signIn(req, res) {
+  const { email, password } = req.body
+
+  try {
+
+    const checkUser = await db.collection('users').findOne({ email })
+
+    if (!checkUser) 
+      return res.status(400).send("Incorrect email or password!")
+
+    const isCorrectPassword = bcrypt.compareSync(password, checkUser.password)
+
+    if (!isCorrectPassword) 
+      return res.status(400).send("Incorrect email or password!")
+
+    const token = uuidV4();
+
+    await db.collection("sessions").insertOne({ userId: checkUser._id, token })
+
+    return res.status(200).send(token)
+
+  } catch (error) {
+    res.status(500).send(error.message)
+  }
+}
