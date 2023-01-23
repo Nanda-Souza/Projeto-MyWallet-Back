@@ -1,5 +1,6 @@
 import {
     getName,
+    getExpenses,
     expense
 } from "../controller/User.js"
 import { Router } from 'express'
@@ -11,6 +12,7 @@ const userRouter = Router()
 
 userRouter.use(tokenValidation)
 userRouter.get("/name", getName)
+userRouter.get("/expenses", getExpenses)
 userRouter.post("/expense", validateSchema(tranSchema), expense)
 
 

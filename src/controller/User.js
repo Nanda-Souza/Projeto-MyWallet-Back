@@ -18,6 +18,23 @@ export async function getName(req, res) {
   }
 }
 
+export async function getExpenses(req, res) {
+    const { authorization } = req.headers
+    const token = authorization?.replace("Bearer ", '')
+      
+
+  try {
+    const userSession = await db.collection("sessions").findOne({ token })
+    //add toArray() for multiple results
+    const userTransactions = await db.collection("transactions").find({ userId: userSession.userId }).toArray() 
+    
+    return res.send(userTransactions)
+
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
 export async function expense(req, res) {
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", '')
